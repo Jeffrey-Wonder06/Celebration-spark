@@ -47,27 +47,19 @@
         const countdownElement = document.getElementById('countdown');
         const buzzerElement = document.getElementById('buzzer');
         const fireworksCanvas = document.getElementById('fireworks');
-        const ctx = fireworksCanvas.getContext('2d');
 
-        // Set the target time for the countdown
-        const targetTime = new Date();
-        targetTime.setHours(24, 0, 0, 0);  // 12:00:00 AM next day
+        // Set the countdown end time to 12:00:00 AM
+        const countdownEnd = new Date();
+        countdownEnd.setHours(24, 0, 0, 0); // Midnight
+
+        // Set the countdown start time to 11:59:15 PM
+        const countdownStart = new Date();
+        countdownStart.setHours(23, 59, 15, 0); // 11:59:15 PM
 
         function updateCountdown() {
             const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const currentSecond = now.getSeconds();
-            
-            let countdownEnd = new Date(now);
-            countdownEnd.setHours(23, 59, 15, 0); // 11:59:15 PM today
-            
-            // Adjust countdown end if it's already past 11:59:15 PM
-            if (now > countdownEnd) {
-                countdownEnd.setDate(countdownEnd.getDate() + 1);
-                countdownEnd.setHours(24, 0, 0, 0); // Move to 12:00:00 AM next day
-            }
 
+            // Calculate time difference from countdownStart
             const timeDiff = countdownEnd - now;
             const seconds = Math.floor(timeDiff / 1000);
             const minutes = Math.floor(seconds / 60);
@@ -75,14 +67,19 @@
             const remainingSeconds = seconds % 60;
             const remainingMinutes = minutes % 60;
 
-            countdownElement.textContent = 
-                `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+            // Display countdown only if we are within the 15-second window
+            if (now >= countdownStart && now <= countdownEnd) {
+                countdownElement.textContent = 
+                    `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 
-            if (timeDiff <= 0) {
-                clearInterval(countdownInterval);
-                countdownElement.textContent = "12:00:00 AM";
-                buzzerElement.style.display = 'block';
-                setTimeout(triggerFireworks, 1000);
+                if (timeDiff <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = "12:00:00 AM";
+                    buzzerElement.style.display = 'block';
+                    setTimeout(triggerFireworks, 1000);
+                }
+            } else {
+                countdownElement.textContent = "11:59:15 PM";
             }
         }
 
@@ -99,5 +96,6 @@
     </script>
 </body>
 </html>
+
 
 
