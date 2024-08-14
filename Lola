@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Buzzer Animation</title>
+    <style>
+        .buzzer {
+            padding: 20px;
+            background-color: gold;
+            border: 2px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 24px;
+        }
+        .confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+        }
+        /* Add your CSS confetti styling here */
+    </style>
+</head>
+<body>
+    <div id="buzzer" class="buzzer">Golden Buzzer</div>
+    <div id="confetti" class="confetti"></div>
+
+    <script>
+        document.getElementById('buzzer').addEventListener('click', function() {
+            let countdown = 3;
+            const countdownInterval = setInterval(() => {
+                if (countdown === 0) {
+                    clearInterval(countdownInterval);
+                    triggerConfetti();
+                } else {
+                    console.log(countdown);
+                    countdown--;
+                }
+            }, 1000);
+        });
+
+        function triggerConfetti() {
+            document.getElementById('confetti').style.display = 'block';
+            // Add your confetti animation code here
+        }
+    </script>
+</body>
+</html>
