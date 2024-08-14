@@ -48,39 +48,35 @@
         const buzzerElement = document.getElementById('buzzer');
         const fireworksCanvas = document.getElementById('fireworks');
 
-        // Set the countdown end time to 12:00:00 AM
-        const countdownEnd = new Date();
-        countdownEnd.setHours(24, 0, 0, 0); // Midnight
-
-        // Set the countdown start time to 11:59:15 PM
+        // Set countdown start and end times
         const countdownStart = new Date();
         countdownStart.setHours(23, 59, 15, 0); // 11:59:15 PM
 
+        const countdownEnd = new Date();
+        countdownEnd.setHours(24, 0, 0, 0); // Midnight (12:00:00 AM)
+
         function updateCountdown() {
             const now = new Date();
-
+            
             // Calculate time difference from countdownStart
-            const timeDiff = countdownEnd - now;
-            const seconds = Math.floor(timeDiff / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const hours = Math.floor(minutes / 60);
-            const remainingSeconds = seconds % 60;
-            const remainingMinutes = minutes % 60;
-
-            // Display countdown only if we are within the 15-second window
-            if (now >= countdownStart && now <= countdownEnd) {
-                countdownElement.textContent = 
-                    `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-
-                if (timeDiff <= 0) {
-                    clearInterval(countdownInterval);
-                    countdownElement.textContent = "12:00:00 AM";
-                    buzzerElement.style.display = 'block';
-                    setTimeout(triggerFireworks, 1000);
-                }
-            } else {
-                countdownElement.textContent = "11:59:15 PM";
+            const timeDiff = countdownStart - now;
+            if (timeDiff <= 0) {
+                countdownElement.textContent = "12:00:00 AM";
+                buzzerElement.style.display = 'block';
+                setTimeout(triggerFireworks, 1000);
+                clearInterval(countdownInterval);
+                return;
             }
+
+            // Calculate hours, minutes, seconds
+            const totalSeconds = Math.floor(timeDiff / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            // Format time as HH:MM:SS
+            countdownElement.textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
         function triggerFireworks() {
@@ -96,6 +92,7 @@
     </script>
 </body>
 </html>
+
 
 
 
