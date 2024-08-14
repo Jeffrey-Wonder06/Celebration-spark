@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
+            overflow: hidden;
         }
         #countdown {
             font-size: 48px;
@@ -18,13 +19,22 @@
         }
         .buzzer {
             display: none;
-            padding: 20px;
+            width: 100px;
+            height: 100px;
             background-color: gold;
-            border: 2px solid #000;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 24px;
-            margin-top: 20px;
+            border: 5px solid #000;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+        }
+        #hand {
+            display: none;
+            width: 100px;
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: press 1s ease-in-out forwards;
         }
         #fireworks {
             display: none;
@@ -35,17 +45,25 @@
             left: 0;
             pointer-events: none;
         }
+
+        @keyframes press {
+            0% { top: -100px; }
+            50% { top: -50px; }
+            100% { top: 0; }
+        }
     </style>
 </head>
 <body>
     <div id="countdown">15</div>
-    <div id="buzzer" class="buzzer">Golden Buzzer!</div>
+    <div class="buzzer" id="buzzer"></div>
+    <img id="hand" src="hand.png" alt="Hand Pressing Buzzer">
     <canvas id="fireworks"></canvas>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
     <script>
         const countdownElement = document.getElementById('countdown');
         const buzzerElement = document.getElementById('buzzer');
+        const handElement = document.getElementById('hand');
         const fireworksCanvas = document.getElementById('fireworks');
 
         let secondsRemaining = 15;
@@ -57,6 +75,7 @@
             } else {
                 countdownElement.style.display = 'none';
                 buzzerElement.style.display = 'block';
+                handElement.style.display = 'block';
                 setTimeout(triggerFireworks, 1000);
                 clearInterval(countdownInterval);
             }
@@ -75,12 +94,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
