@@ -38,7 +38,7 @@
     </style>
 </head>
 <body>
-    <div id="countdown">11:59:15</div>
+    <div id="countdown">11:59:15 PM</div>
     <div id="buzzer" class="buzzer">Golden Buzzer!</div>
     <canvas id="fireworks"></canvas>
 
@@ -48,13 +48,27 @@
         const buzzerElement = document.getElementById('buzzer');
         const fireworksCanvas = document.getElementById('fireworks');
         const ctx = fireworksCanvas.getContext('2d');
-        
+
+        // Set the target time for the countdown
         const targetTime = new Date();
-        targetTime.setHours(12, 0, 0, 0);
+        targetTime.setHours(24, 0, 0, 0);  // 12:00:00 AM next day
 
         function updateCountdown() {
             const now = new Date();
-            const timeDiff = targetTime - now;
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentSecond = now.getSeconds();
+            
+            let countdownEnd = new Date(now);
+            countdownEnd.setHours(23, 59, 15, 0); // 11:59:15 PM today
+            
+            // Adjust countdown end if it's already past 11:59:15 PM
+            if (now > countdownEnd) {
+                countdownEnd.setDate(countdownEnd.getDate() + 1);
+                countdownEnd.setHours(24, 0, 0, 0); // Move to 12:00:00 AM next day
+            }
+
+            const timeDiff = countdownEnd - now;
             const seconds = Math.floor(timeDiff / 1000);
             const minutes = Math.floor(seconds / 60);
             const hours = Math.floor(minutes / 60);
@@ -66,7 +80,7 @@
 
             if (timeDiff <= 0) {
                 clearInterval(countdownInterval);
-                countdownElement.textContent = "12:00:00";
+                countdownElement.textContent = "12:00:00 AM";
                 buzzerElement.style.display = 'block';
                 setTimeout(triggerFireworks, 1000);
             }
@@ -85,4 +99,5 @@
     </script>
 </body>
 </html>
+
 
